@@ -7,6 +7,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class TestServer {
+
     public static void main(String[] args) throws Exception {
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
@@ -15,15 +16,18 @@ public class TestServer {
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-            serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new TestServerInitializer());
+            serverBootstrap.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new TestServerInitializer());
 
-            ChannelFuture channelFuture = serverBootstrap.bind(6668).sync();
-            
+            ChannelFuture channelFuture = serverBootstrap.bind(8080).sync();
+
             channelFuture.channel().closeFuture().sync();
 
-        }finally {
+        } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
     }
+
 }
