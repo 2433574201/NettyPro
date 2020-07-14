@@ -1,11 +1,14 @@
 package com.atguigu.bingo;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.CharsetUtil;
 
 /**
  * TODO desc
@@ -15,9 +18,24 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class Client {
 
-    public static void main(String[] args) throws InterruptedException {
+    private volatile Channel channel;
 
-        NioEventLoopGroup loopGroup = new NioEventLoopGroup();
+    private NioEventLoopGroup loopGroup;
+
+
+    public static void main(String[] args) throws InterruptedException {
+        Client client = new Client();
+
+        client.connection();
+
+        while (true) {
+            Thread.sleep(1000);
+            client.sendMsg();
+        }
+    }
+
+    public void connection() throws InterruptedException {
+        loopGroup = new NioEventLoopGroup();
 
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -28,18 +46,33 @@ public class Client {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new ClientChannelHandler());
                         }
-                    });
+                    })
+            ;
 
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8888).sync();
 
             System.out.println("客户端 ok..");
 
-            channelFuture.channel().closeFuture().sync();
-        } finally {
-            loopGroup.shutdownGracefully();
-        }
+            channel = channelFuture.channel();
 
+//            channelFuture.channel().closeFuture().sync();
+        } finally {
+//            loopGroup.shutdownGracefully();
+        }
     }
 
+    public void shutdown() {
+        if (channel != null) {
+            channel.close();
+        }
+        loopGroup.shutdownGracefully();
+    }
+
+    public void sendMsg() {
+        if (channel == null) {
+            return;
+        }
+        channel.writeAndFlush(Unpooled.copiedBuffer("hello" + System.currentTimeMillis(), CharsetUtil.UTF_8));
+    }
 
 }

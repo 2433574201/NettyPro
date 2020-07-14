@@ -38,6 +38,7 @@ public class Server {
             ChannelFuture channelFuture = bootstrap.bind(8888).sync();
 
             channelFuture.addListener(new ChannelFutureListener() {
+
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
                     if (future.isSuccess()) {
