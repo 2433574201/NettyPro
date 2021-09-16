@@ -14,7 +14,7 @@ public class MyClientHandler extends SimpleChannelInboundHandler<MessageProtocol
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //使用客户端发送10条数据 "今天天气冷，吃火锅" 编号
 
-        for(int i = 0; i< 5; i++) {
+        for(int i = 0; i< 500; i++) {
             String mes = "今天天气冷，吃火锅";
             byte[] content = mes.getBytes(Charset.forName("utf-8"));
             int length = mes.getBytes(Charset.forName("utf-8")).length;
@@ -23,6 +23,9 @@ public class MyClientHandler extends SimpleChannelInboundHandler<MessageProtocol
             MessageProtocol messageProtocol = new MessageProtocol();
             messageProtocol.setLen(length);
             messageProtocol.setContent(content);
+            messageProtocol.setPoint_x(90.4444f);
+            messageProtocol.setPoint_y(180.4774f);
+            messageProtocol.setPoint_z(10.0f);
             ctx.writeAndFlush(messageProtocol);
 
         }

@@ -32,6 +32,9 @@ public class MyServerHandler extends SimpleChannelInboundHandler<MessageProtocol
         System.out.println("服务器接收到信息如下");
         System.out.println("长度=" + len);
         System.out.println("内容=" + new String(content, Charset.forName("utf-8")));
+        System.out.println("X:"+msg.getPoint_x()+" "+
+                "Y:"+msg.getPoint_y()+" "+
+                "Z:"+msg.getPoint_z());
 
         System.out.println("服务器接收到消息包数量=" + (++this.count));
 

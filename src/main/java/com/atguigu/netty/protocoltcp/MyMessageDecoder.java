@@ -15,11 +15,18 @@ public class MyMessageDecoder extends ReplayingDecoder<Void> {
 
         byte[] content = new byte[length];
         in.readBytes(content);
+        //int flen = Float.BYTES;
+        float point_x = in.readFloat();
+        float point_y = in.readFloat();
+        float point_z = in.readFloat();
 
         //封装成 MessageProtocol 对象，放入 out， 传递下一个handler业务处理
         MessageProtocol messageProtocol = new MessageProtocol();
         messageProtocol.setLen(length);
         messageProtocol.setContent(content);
+        messageProtocol.setPoint_x(point_x);
+        messageProtocol.setPoint_y(point_y);
+        messageProtocol.setPoint_z(point_z);
 
         out.add(messageProtocol);
 

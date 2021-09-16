@@ -18,6 +18,7 @@ public class MyServerHandler extends SimpleChannelInboundHandler<ByteBuf>{
         ctx.close();
     }
 
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 

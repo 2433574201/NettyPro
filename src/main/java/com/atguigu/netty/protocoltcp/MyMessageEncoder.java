@@ -10,5 +10,8 @@ public class MyMessageEncoder extends MessageToByteEncoder<MessageProtocol> {
         System.out.println("MyMessageEncoder encode 方法被调用");
         out.writeInt(msg.getLen());
         out.writeBytes(msg.getContent());
+        out.writeFloat(msg.getPoint_x());
+        out.writeFloat(msg.getPoint_y());
+        out.writeFloat(msg.getPoint_z());
     }
 }
